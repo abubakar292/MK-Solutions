@@ -49,7 +49,7 @@ const ConnectDatabaseScreen: React.FC = () => {
 
   return (
     <div className="min-h-[100dvh] bg-[var(--bg)] flex flex-col items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md rounded-[20px] border border-[var(--border)] bg-[var(--bg)] p-6 sm:p-8 space-y-6 shadow-soft">
+      <div className="w-full max-w-lg rounded-[20px] border border-[var(--border)] bg-[var(--bg)] p-6 sm:p-8 space-y-6 shadow-soft">
         <div className="flex flex-col items-center gap-3 text-center">
           <BrandLogo size="lg" />
           <div className="space-y-1">
@@ -57,7 +57,7 @@ const ConnectDatabaseScreen: React.FC = () => {
               Connect your database
             </h1>
             <p className="text-xs sm:text-sm text-[var(--text-muted)]">
-              Set the missing Supabase environment variables below and restart the app.
+              Set the missing Supabase environment variables below and redeploy or restart the app.
             </p>
           </div>
         </div>
@@ -85,6 +85,30 @@ const ConnectDatabaseScreen: React.FC = () => {
               </div>
             );
           })}
+        </div>
+
+        <div className="rounded-[12px] border border-[var(--border)] bg-[var(--bg-subtle)] p-4 space-y-3 text-xs text-[var(--text-secondary)]">
+          <p className="font-semibold text-[var(--text)]">
+            How to fix on Vercel:
+          </p>
+          <ol className="list-decimal pl-4 space-y-1.5 leading-relaxed">
+            <li>
+              In your Supabase dashboard, open{' '}
+              <span className="font-medium text-[var(--text)]">Project Settings → API</span> and copy the{' '}
+              <span className="font-medium text-[var(--text)]">Project URL</span> and{' '}
+              <span className="font-medium text-[var(--text)]">anon public</span> key.
+            </li>
+            <li>
+              In your Vercel project dashboard, open{' '}
+              <span className="font-medium text-[var(--text)]">Settings → Environment Variables</span> and add{' '}
+              <code className="font-mono text-[11px] text-[var(--text)]">VITE_SUPABASE_URL</code> and{' '}
+              <code className="font-mono text-[11px] text-[var(--text)]">VITE_SUPABASE_ANON_KEY</code> for Production, Preview, and Development.
+            </li>
+            <li>
+              Go to <span className="font-medium text-[var(--text)]">Deployments</span> in Vercel, click the three dots on your latest deployment, and click{' '}
+              <span className="font-medium text-[var(--text)]">Redeploy</span> (Vite embeds environment variables at build time).
+            </li>
+          </ol>
         </div>
       </div>
     </div>

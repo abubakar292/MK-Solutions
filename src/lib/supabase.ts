@@ -4,9 +4,21 @@ export type RequiredSupabaseEnvVar = 'VITE_SUPABASE_URL' | 'VITE_SUPABASE_ANON_K
 
 export const OFFLINE_SAVE_MESSAGE = 'You are offline. Reconnect to save';
 
-const rawSupabaseUrl = (import.meta.env.VITE_SUPABASE_URL as string | undefined)?.trim() ?? '';
-const rawSupabaseAnonKey =
-  (import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined)?.trim() ?? '';
+const metaEnv = (import.meta.env ?? {}) as Record<string, string | undefined>;
+
+const rawSupabaseUrl = (
+  metaEnv.VITE_SUPABASE_URL ||
+  metaEnv.NEXT_PUBLIC_SUPABASE_URL ||
+  ''
+).trim();
+
+const rawSupabaseAnonKey = (
+  metaEnv.VITE_SUPABASE_ANON_KEY ||
+  metaEnv.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  metaEnv.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  metaEnv.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY ||
+  ''
+).trim();
 
 /**
  * Blocks any save/mutation immediately when the browser is offline so writes are never silently dropped.

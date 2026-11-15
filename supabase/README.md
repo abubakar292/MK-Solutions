@@ -46,3 +46,16 @@ order by p.proname;
 1. Open **SQL Editor** in your test Supabase project.
 2. Copy and paste the contents of `supabase/reset.sql` and click **Run**.
 3. You can then re-run `supabase/schema.sql` to start from a clean database.
+
+## 4. Deploying to Vercel
+
+1. In your Supabase project dashboard, go to **Project Settings → API** and copy:
+   - **Project URL** (e.g., `https://<project-ref>.supabase.co`)
+   - **Project API keys → `anon` `public`** key (never use the `service_role` key).
+2. In your Vercel project dashboard (`mksolutions-five`), go to **Settings → Environment Variables** and add:
+   - `VITE_SUPABASE_URL` = your Supabase Project URL
+   - `VITE_SUPABASE_ANON_KEY` = your Supabase `anon` `public` key
+   *(Note: If you connected the Vercel Supabase Marketplace integration, `SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_URL` and `SUPABASE_ANON_KEY` / `NEXT_PUBLIC_SUPABASE_ANON_KEY` are also automatically recognized at build time).*
+3. In Vercel, open **Deployments**, click the `•••` menu on the latest deployment, and select **Redeploy** so Vite bundles the environment variables into the production build.
+4. In Supabase **Authentication → URL Configuration**, set **Site URL** to `https://mksolutions-five.vercel.app` and add `https://mksolutions-five.vercel.app/**` under **Redirect URLs**.
+

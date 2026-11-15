@@ -51,6 +51,174 @@ export function getActiveLogoUrl(companyId?: string): string {
   return getCustomLogoDataUrl(companyId) || MK_LOGO_URL;
 }
 
+let activeManifestBlobUrl: string | null = null;
+
+function renderSquareIconDataUrl(
+  img: HTMLImageElement,
+  size: number,
+  paddingRatio = 0.06
+): string {
+  const canvas = document.createElement('canvas');
+  canvas.width = size;
+  canvas.height = size;
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return '';
+
+  ctx.fillStyle = '#FFFFFF';
+  ctx.fillRect(0, 0, size, size);
+
+  const pad = Math.round(size * paddingRatio);
+  const avail = size - pad * 2;
+  const srcW = img.naturalWidth || size;
+  const srcH = img.naturalHeight || size;
+  const scale = Math.min(avail / srcW, avail / srcH);
+  const drawW = Math.round(srcW * scale);
+  const drawH = Math.round(srcH * scale);
+  const offsetX = Math.round((size - drawW) / 2);
+  const offsetY = Math.round((size - drawH) / 2);
+
+  ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
+  return canvas.toDataURL('image/png');
+}
+
+function syncBrowserIconsWithCustomLogo(logoSrc: string | null): void {
+  if (typeof window === 'undefined' || typeof document === 'undefined') {
+    return;
+  }
+
+  const restoreDefaultIcons = () => {
+    const icon192 = document.querySelector<HTMLLinkElement>(
+      'link[rel="icon"][sizes="192x192"]'
+    );
+    if (icon192) icon192.href = '/pwa-192x192.png';
+
+    const icon512 = document.querySelector<HTMLLinkElement>(
+      'link[rel="icon"][sizes="512x512"]'
+    );
+    if (icon512) icon512.href = '/pwa-512x512.png';
+
+    const shortcut = document.querySelector<HTMLLinkElement>(
+      'link[rel="shortcut icon"]'
+    );
+    if (shortcut) shortcut.href = '/favicon.ico';
+
+    const appleTouch = document.querySelector<HTMLLinkElement>(
+      'link[rel="apple-touch-icon"]'
+    );
+    if (appleTouch) appleTouch.href = '/apple-touch-icon.png';
+
+    const manifestLink = document.querySelector<HTMLLinkElement>(
+      'link[rel="manifest"]'
+    );
+    if (manifestLink) {
+      manifestLink.href = '/manifest.webmanifest';
+    }
+    if (activeManifestBlobUrl) {
+      URL.revokeObjectURL(activeManifestBlobUrl);
+      activeManifestBlobUrl = null;
+    }
+  };
+
+  if (!logoSrc) {
+    restoreDefaultIcons();
+    return;
+  }
+
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => {
+    try {
+      const icon180Url = renderSquareIconDataUrl(img, 180, 0.06);
+      const icon192Url = renderSquareIconDataUrl(img, 192, 0.06);
+      const icon512Url = renderSquareIconDataUrl(img, 512, 0.06);
+      const maskable512Url = renderSquareIconDataUrl(img, 512, 0.12);
+
+      if (icon192Url) {
+        const icon192 = document.querySelector<HTMLLinkElement>(
+          'link[rel="icon"][sizes="192x192"]'
+        );
+        if (icon192) icon192.href = icon192Url;
+
+        const shortcut = document.querySelector<HTMLLinkElement>(
+          'link[rel="shortcut icon"]'
+        );
+        if (shortcut) shortcut.href = icon192Url;
+      }
+
+      if (icon512Url) {
+        const icon512 = document.querySelector<HTMLLinkElement>(
+          'link[rel="icon"][sizes="512x512"]'
+        );
+        if (icon512) icon512.href = icon512Url;
+      }
+
+      if (icon180Url) {
+        const appleTouch = document.querySelector<HTMLLinkElement>(
+          'link[rel="apple-touch-icon"]'
+        );
+        if (appleTouch) appleTouch.href = icon180Url;
+      }
+
+      if (icon192Url && icon512Url && maskable512Url) {
+        const origin = window.location.origin;
+        const dynamicManifest = {
+          id: `${origin}/`,
+          name: 'MK Solutions',
+          short_name: 'MK Solutions',
+          description:
+            'Factory management, inventory, production, dispatch, billing, and accounting web application for MK Melting Solutions.',
+          theme_color: '#FFFFFF',
+          background_color: '#FFFFFF',
+          display: 'standalone',
+          start_url: `${origin}/`,
+          scope: `${origin}/`,
+          icons: [
+            {
+              src: icon192Url,
+              sizes: '192x192',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: icon512Url,
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'any',
+            },
+            {
+              src: maskable512Url,
+              sizes: '512x512',
+              type: 'image/png',
+              purpose: 'maskable',
+            },
+          ],
+        };
+
+        const blob = new Blob([JSON.stringify(dynamicManifest)], {
+          type: 'application/manifest+json',
+        });
+        const nextBlobUrl = URL.createObjectURL(blob);
+        const manifestLink = document.querySelector<HTMLLinkElement>(
+          'link[rel="manifest"]'
+        );
+        if (manifestLink) {
+          manifestLink.href = nextBlobUrl;
+        }
+        if (activeManifestBlobUrl) {
+          URL.revokeObjectURL(activeManifestBlobUrl);
+        }
+        activeManifestBlobUrl = nextBlobUrl;
+      }
+    } catch {
+      restoreDefaultIcons();
+    }
+  };
+  img.onerror = () => {
+    restoreDefaultIcons();
+  };
+  img.src = logoSrc;
+}
+
 export function setCustomLogoDataUrl(
   dataUrl: string | null,
   companyId?: string,
@@ -76,11 +244,13 @@ export function setCustomLogoDataUrl(
         base64: base64Candidate,
       });
     }
+    syncBrowserIconsWithCustomLogo(base64Candidate || dataUrl);
   } else {
     customLogoUrlByCompany.delete(mapKey);
     customLogoUrlByCompany.delete('__default__');
     cachedCustomBase64ByCompany.delete(mapKey);
     cachedCustomBase64ByCompany.delete('__default__');
+    syncBrowserIconsWithCustomLogo(null);
   }
 
   if (typeof window !== 'undefined') {
