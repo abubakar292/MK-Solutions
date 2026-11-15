@@ -193,15 +193,27 @@ export const DocumentPrepOverlay: React.FC = () => {
 
 function getPdfStyles() {
   const bg = '#FFFFFF';
-  const text = '#1E1519';
-  const textMuted = '#665C61';
-  const brand = '#E00000';
-  const brandSoft = '#FFF2F2';
-  const border = '#E6DCE0';
-  const surfaceSubtle = '#F9F6F7';
+  const text = '#18181B';
+  const textMuted = '#52525B';
+  const ruleStrong = '#3F3F46';
+  const headerRule = '#CBD5E1';
+  const highlightBg = '#F1F5F9';
+  const border = '#E4E4E7';
+  const surfaceSubtle = '#F8FAFC';
+  const danger = '#DC2626';
 
   return {
-    colors: { bg, text, textMuted, brand, brandSoft, border, surfaceSubtle },
+    colors: {
+      bg,
+      text,
+      textMuted,
+      ruleStrong,
+      headerRule,
+      highlightBg,
+      border,
+      surfaceSubtle,
+      danger,
+    },
     styles: StyleSheet.create({
       page: {
         paddingTop: 28,
@@ -217,7 +229,7 @@ function getPdfStyles() {
         justifyContent: 'space-between',
         alignItems: 'center',
         borderBottomWidth: 1.5,
-        borderBottomColor: brand,
+        borderBottomColor: ruleStrong,
         paddingBottom: 10,
         marginBottom: 12,
       },
@@ -248,7 +260,7 @@ function getPdfStyles() {
       docTitleText: {
         fontSize: 13,
         fontFamily: 'Helvetica-Bold',
-        color: brand,
+        color: text,
       },
       docMetaText: {
         fontSize: 8.5,
@@ -281,7 +293,7 @@ function getPdfStyles() {
       sectionTitle: {
         fontSize: 10,
         fontFamily: 'Helvetica-Bold',
-        color: brand,
+        color: text,
         marginTop: 14,
         marginBottom: 6,
       },
@@ -290,7 +302,7 @@ function getPdfStyles() {
         backgroundColor: surfaceSubtle,
         borderTopWidth: 1,
         borderBottomWidth: 1,
-        borderColor: brand,
+        borderColor: headerRule,
         paddingVertical: 5.5,
         paddingHorizontal: 6,
       },
@@ -324,7 +336,7 @@ function getPdfStyles() {
       },
       totalHighlight: {
         borderTopWidth: 1,
-        borderTopColor: brand,
+        borderTopColor: ruleStrong,
         paddingTop: 5,
         marginTop: 3,
       },
@@ -496,7 +508,7 @@ const PdfDocumentTemplate: React.FC<{
                         style={{
                           fontSize: 9.5,
                           fontFamily: 'Helvetica-Bold',
-                          color: colors.brand,
+                          color: colors.text,
                         }}
                       >
                         {block.title}
@@ -523,14 +535,14 @@ const PdfDocumentTemplate: React.FC<{
                     ) : null}
                   </View>
 
-                  {/* Table column headers — red header text, repeats on each page if block spans pages */}
+                  {/* Table column headers — clean slate header text, repeats on each page if block spans pages */}
                   <View
                     fixed={!keepBlockTogether}
                     wrap={false}
                     style={{
                       flexDirection: 'row',
                       borderBottomWidth: 1,
-                      borderBottomColor: colors.brand,
+                      borderBottomColor: colors.headerRule,
                       paddingVertical: 4.5,
                       paddingHorizontal: 8,
                       backgroundColor: colors.bg,
@@ -544,7 +556,7 @@ const PdfDocumentTemplate: React.FC<{
                           flex: col.widthPercent ? undefined : 1,
                           fontSize: 7.5,
                           fontFamily: 'Helvetica-Bold',
-                          color: colors.brand,
+                          color: colors.textMuted,
                           textAlign: col.align === 'right' ? 'right' : 'left',
                         }}
                       >
@@ -553,7 +565,7 @@ const PdfDocumentTemplate: React.FC<{
                     ))}
                   </View>
 
-                  {/* Table rows (no zebra shading; rows never split across pages; no red for numbers) */}
+                  {/* Table rows */}
                   {block.rows.map((row, rIdx) => {
                     const isHighlighted = row.variant === 'highlighted';
                     const isSubtotal = row.variant === 'subtotal';
@@ -568,11 +580,11 @@ const PdfDocumentTemplate: React.FC<{
                           paddingVertical: isHighlighted ? 5 : isDetail ? 3.5 : 4.2,
                           paddingHorizontal: 8,
                           borderTopWidth: isHighlighted ? 1 : isSubtotal ? 0.75 : 0,
-                          borderTopColor: isHighlighted ? colors.brand : colors.border,
+                          borderTopColor: isHighlighted ? colors.ruleStrong : colors.border,
                           borderBottomWidth: isLast ? 0 : 0.5,
                           borderBottomColor: colors.border,
                           backgroundColor: isHighlighted
-                            ? colors.brandSoft
+                            ? colors.highlightBg
                             : isSubtotal
                               ? colors.surfaceSubtle
                               : colors.bg,
@@ -617,10 +629,10 @@ const PdfDocumentTemplate: React.FC<{
                   marginBottom: doc.overviewLayout.checkLine ? 6 : 0,
                   paddingVertical: 6.5,
                   paddingHorizontal: 10,
-                  borderWidth: 1.2,
-                  borderColor: colors.brand,
+                  borderWidth: 1,
+                  borderColor: colors.ruleStrong,
                   borderRadius: 5,
-                  backgroundColor: colors.brandSoft,
+                  backgroundColor: colors.highlightBg,
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -671,7 +683,7 @@ const PdfDocumentTemplate: React.FC<{
                   borderWidth: 1,
                   borderColor: doc.overviewLayout.checkLine.isConsistent
                     ? colors.border
-                    : colors.brand,
+                    : colors.danger,
                   borderRadius: 5,
                   backgroundColor: colors.surfaceSubtle,
                   flexDirection: 'row',
@@ -695,7 +707,7 @@ const PdfDocumentTemplate: React.FC<{
                     style={{
                       fontSize: 7.5,
                       fontFamily: 'Helvetica-Bold',
-                      color: colors.brand,
+                      color: colors.danger,
                     }}
                   >
                     {doc.overviewLayout.checkLine.warningText}
@@ -753,9 +765,12 @@ const PdfDocumentTemplate: React.FC<{
                         c.align === 'right'
                           ? [
                               pdfStyles.cellRight,
-                              { fontFamily: 'Helvetica-Bold', color: colors.brand },
+                              { fontFamily: 'Helvetica-Bold', color: colors.textMuted },
                             ]
-                          : [pdfStyles.cell, { fontFamily: 'Helvetica-Bold', color: colors.brand }]
+                          : [
+                              pdfStyles.cell,
+                              { fontFamily: 'Helvetica-Bold', color: colors.textMuted },
+                            ]
                       }
                     >
                       {c.header}
@@ -792,11 +807,11 @@ const PdfDocumentTemplate: React.FC<{
                           c.align === 'right'
                             ? [
                                 pdfStyles.cellRight,
-                                { fontFamily: 'Helvetica-Bold', color: colors.brand },
+                                { fontFamily: 'Helvetica-Bold', color: colors.textMuted },
                               ]
                             : [
                                 pdfStyles.cell,
-                                { fontFamily: 'Helvetica-Bold', color: colors.brand },
+                                { fontFamily: 'Helvetica-Bold', color: colors.textMuted },
                               ]
                         }
                       >
@@ -843,7 +858,7 @@ const PdfDocumentTemplate: React.FC<{
                       style={{
                         fontSize: t.highlight ? 10.5 : 8.5,
                         fontFamily: 'Helvetica-Bold',
-                        color: t.highlight ? colors.brand : colors.text,
+                        color: colors.text,
                       }}
                     >
                       {t.value}
@@ -958,8 +973,8 @@ const PrintSheetContent: React.FC<{
 
   return (
     <div className="mk-a4-sheet rounded-[16px] border border-[var(--border)] bg-[var(--bg)] p-5 sm:p-8 space-y-5 text-[var(--text)] shadow-soft">
-      {/* Branded Document Header with Accent Rule */}
-      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b-2 border-[var(--brand)]">
+      {/* Clean Document Header */}
+      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4 pb-4 border-b border-[var(--border-strong)]">
         <div className="space-y-1">
           <BrandLogo
             size="lg"
@@ -975,7 +990,7 @@ const PrintSheetContent: React.FC<{
           )}
         </div>
         <div className="sm:text-right space-y-0.5">
-          <h2 className="font-heading text-lg font-semibold text-[var(--brand)]">{doc.title}</h2>
+          <h2 className="font-heading text-lg font-semibold text-[var(--text)]">{doc.title}</h2>
           {doc.docNumber && (
             <p className="text-xs font-semibold text-[var(--text)] tabular-nums">{doc.docNumber}</p>
           )}
@@ -1018,7 +1033,7 @@ const PrintSheetContent: React.FC<{
               >
                 <div className="border-b border-[var(--border)] bg-[var(--surface-subtle)] px-4 py-2.5 flex flex-wrap items-baseline justify-between gap-2">
                   <div>
-                    <h3 className="font-heading text-sm font-semibold text-[var(--brand)]">
+                    <h3 className="font-heading text-sm font-semibold text-[var(--text)]">
                       {block.title}
                     </h3>
                     {block.caption && (
@@ -1039,7 +1054,7 @@ const PrintSheetContent: React.FC<{
                         {block.columns.map((col) => (
                           <th
                             key={col.key}
-                            className={`px-3.5 py-2 text-[11px] font-semibold text-[var(--brand)] ${
+                            className={`px-3.5 py-2 text-[11px] font-semibold text-[var(--text-muted)] ${
                               col.align === 'right' ? 'text-right' : 'text-left'
                             }`}
                           >
@@ -1058,7 +1073,7 @@ const PrintSheetContent: React.FC<{
                             key={rIdx}
                             className={
                               isHighlighted
-                                ? 'border-t border-[var(--brand)] bg-[var(--brand-soft)] font-heading font-semibold text-[var(--text)]'
+                                ? 'border-t border-[var(--border-strong)] bg-[var(--surface-subtle)] font-heading font-semibold text-[var(--text)]'
                                 : isSubtotal
                                   ? 'bg-[var(--surface-subtle)] font-semibold text-[var(--text)]'
                                   : isDetail
@@ -1092,7 +1107,7 @@ const PrintSheetContent: React.FC<{
 
           {/* Grand total bar when present */}
           {doc.overviewLayout.grandTotalBar && (
-            <div className="rounded-[10px] border border-[var(--brand)] bg-[var(--brand-soft)] px-4 py-3 flex flex-wrap items-center justify-between gap-2 break-inside-avoid">
+            <div className="rounded-[10px] border border-[var(--border-strong)] bg-[var(--surface-subtle)] px-4 py-3 flex flex-wrap items-center justify-between gap-2 break-inside-avoid">
               <div>
                 <div className="font-heading text-sm font-bold text-[var(--text)]">
                   {doc.overviewLayout.grandTotalBar.label}
@@ -1118,7 +1133,7 @@ const PrintSheetContent: React.FC<{
               </span>
               {!doc.overviewLayout.checkLine.isConsistent &&
                 doc.overviewLayout.checkLine.warningText && (
-                  <span className="font-semibold text-[var(--brand)]">
+                  <span className="font-semibold text-[var(--danger)]">
                     {doc.overviewLayout.checkLine.warningText}
                   </span>
                 )}
@@ -1165,11 +1180,11 @@ const PrintSheetContent: React.FC<{
             <div className="overflow-x-auto rounded-[10px] border border-[var(--border)]">
               <table className="w-full border-collapse text-sm">
                 <thead>
-                  <tr className="bg-[var(--surface-subtle)] border-y border-[var(--brand)]">
+                  <tr className="bg-[var(--surface-subtle)] border-b border-[var(--border)]">
                     {doc.columns.map((c) => (
                       <th
                         key={c.key}
-                        className={`px-3 py-2.5 text-xs font-semibold text-[var(--brand)] ${
+                        className={`px-3 py-2.5 text-xs font-semibold text-[var(--text-muted)] ${
                           c.align === 'right' ? 'text-right' : 'text-left'
                         }`}
                       >
@@ -1202,17 +1217,17 @@ const PrintSheetContent: React.FC<{
           {doc.extraSections &&
             doc.extraSections.map((sec, sIdx) => (
               <div key={sIdx} className="space-y-2 break-inside-avoid">
-                <h3 className="font-heading text-xs font-bold text-[var(--brand)]">
+                <h3 className="font-heading text-xs font-bold text-[var(--text)]">
                   {sec.title}
                 </h3>
                 <div className="overflow-x-auto rounded-[10px] border border-[var(--border)]">
                   <table className="w-full border-collapse text-sm">
                     <thead>
-                      <tr className="bg-[var(--surface-subtle)] border-y border-[var(--brand)]">
+                      <tr className="bg-[var(--surface-subtle)] border-b border-[var(--border)]">
                         {sec.columns.map((c) => (
                           <th
                             key={c.key}
-                            className={`px-3 py-2 text-xs font-semibold text-[var(--brand)] ${
+                            className={`px-3 py-2 text-xs font-semibold text-[var(--text-muted)] ${
                               c.align === 'right' ? 'text-right' : 'text-left'
                             }`}
                           >
@@ -1261,7 +1276,7 @@ const PrintSheetContent: React.FC<{
                       key={idx}
                       className={`flex items-center justify-between py-1 ${
                         t.highlight
-                          ? 'border-t border-[var(--brand)] pt-2 font-heading font-bold text-[var(--brand)]'
+                          ? 'border-t border-[var(--border-strong)] pt-2 font-heading font-bold text-[var(--text)]'
                           : 'text-xs text-[var(--text)]'
                       }`}
                     >

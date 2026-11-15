@@ -3134,7 +3134,7 @@ export const ReportsPage: React.FC = () => {
                 {/* Heading band: section name appears once + plain caption + optional formula */}
                 <div className="flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--border)] bg-[var(--surface-subtle)] px-4 py-3">
                   <div>
-                    <h3 className="font-heading text-sm font-semibold text-[var(--brand)]">
+                    <h3 className="font-heading text-sm font-semibold text-[var(--text)]">
                       {block.title}
                     </h3>
                     <p className="mt-0.5 text-xs text-[var(--text-muted)]">{block.caption}</p>
@@ -3172,7 +3172,7 @@ export const ReportsPage: React.FC = () => {
                             key={rIdx}
                             className={
                               isHighlighted
-                                ? 'border-t-2 border-[var(--brand)] bg-[var(--brand-soft)] font-heading text-sm font-semibold text-[var(--brand)]'
+                                ? 'border-t-2 border-[var(--border-strong)] bg-[var(--surface-subtle)] font-heading text-sm font-semibold text-[var(--text)]'
                                 : isSubtotal
                                   ? 'bg-[var(--surface-subtle)] font-semibold text-[var(--text)]'
                                   : 'text-[var(--text)]'
