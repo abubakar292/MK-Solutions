@@ -814,25 +814,25 @@ export const EmployeesPage: React.FC = () => {
         </div>
 
         {/* D7 Employee Ledger 6 Compact Cards */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 min-w-0">
+        <div className="grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 min-w-0">
           {/* 1. This month (salary) */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               This month (salary)
             </span>
-            <span className="break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
+            <span className="mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
               {formatMoney(thisMonthInfo.salary)}
             </span>
           </div>
 
           {/* 2. Advances this month */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               Advances this month
             </span>
             <span
               className={cn(
-                'break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums',
+                'mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums',
                 isWarningOver80 ? 'text-[var(--danger)]' : 'text-[var(--brand)]'
               )}
             >
@@ -841,41 +841,41 @@ export const EmployeesPage: React.FC = () => {
           </div>
 
           {/* 3. Payable at month end */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               Payable at month end
             </span>
-            <span className="break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
+            <span className="mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
               {formatMoney(thisMonthInfo.payableAtMonthEnd)}
             </span>
           </div>
 
           {/* 4. Current balance */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-[var(--brand-soft)]/35 px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-[var(--brand-soft)]/35 px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               Current balance
             </span>
-            <span className="break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--brand)]">
+            <span className="mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--brand)]">
               {formatMoney(selectedEmployeeLedger.currentBalance)}
             </span>
           </div>
 
           {/* 5. Advances this year */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               Advances this year
             </span>
-            <span className="break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
+            <span className="mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--text)]">
               {formatMoney(selectedEmployeeLedger.advancesThisYear)}
             </span>
           </div>
 
           {/* 6. Salary paid this year */}
-          <div className="flex min-h-[76px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3.5 py-2.5 shadow-[var(--shadow-xs)]">
-            <span className="truncate text-[11px] font-medium text-[var(--text-muted)]">
+          <div className="flex min-h-[74px] min-w-0 flex-col justify-between rounded-[12px] border border-[var(--border)] bg-white px-3 py-2.5 shadow-[var(--shadow-xs)]">
+            <span className="text-[11px] font-medium leading-snug text-[var(--text-muted)] break-words">
               Salary paid this year
             </span>
-            <span className="break-words font-heading text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--success)]">
+            <span className="mt-1 break-words font-heading text-sm min-[400px]:text-base sm:text-[17px] font-bold leading-tight tabular-nums text-[var(--success)]">
               {formatMoney(selectedEmployeeLedger.salaryPaidThisYear)}
             </span>
           </div>
@@ -1792,37 +1792,37 @@ export const EmployeesPage: React.FC = () => {
                       </div>
                     </div>
 
-                    <div className="mt-4 grid grid-cols-3 gap-2.5 border-t border-[var(--border)] pt-3 text-xs">
-                      <div className="min-w-0">
+                    <div className="mt-4 grid grid-cols-1 min-[400px]:grid-cols-3 gap-2 border-t border-[var(--border)] pt-3 text-xs">
+                      <div className="flex items-center justify-between min-[400px]:block min-w-0">
                         <div
                           title="Salary"
                           className="truncate text-[11px] text-[var(--text-muted)]"
                         >
                           Salary
                         </div>
-                        <div className="mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--text)]">
+                        <div className="min-[400px]:mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--text)]">
                           {formatMoney(metrics.salary)}
                         </div>
                       </div>
-                      <div className="min-w-0">
+                      <div className="flex items-center justify-between min-[400px]:block min-w-0">
                         <div
-                          title="Advances this month"
+                          title="Advances"
                           className="truncate text-[11px] text-[var(--text-muted)]"
                         >
-                          Advances this month
+                          Advances
                         </div>
-                        <div className="mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--brand)]">
+                        <div className="min-[400px]:mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--brand)]">
                           {formatMoney(metrics.advancesThisMonth)}
                         </div>
                       </div>
-                      <div className="min-w-0 text-right">
+                      <div className="flex items-center justify-between min-[400px]:block min-w-0 min-[400px]:text-right">
                         <div
-                          title="Payable this month"
+                          title="Payable"
                           className="truncate text-[11px] text-[var(--text-muted)]"
                         >
-                          Payable this month
+                          Payable
                         </div>
-                        <div className="mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--success)]">
+                        <div className="min-[400px]:mt-0.5 break-words font-heading font-bold tabular-nums text-[var(--success)]">
                           {formatMoney(metrics.payableThisMonth)}
                         </div>
                       </div>

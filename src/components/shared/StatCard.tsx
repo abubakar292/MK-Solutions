@@ -154,7 +154,7 @@ export const StatCard: React.FC<StatCardProps> = ({
           : undefined
       }
       className={cn(
-        'group relative flex flex-col justify-between rounded-[16px] border p-3.5 sm:p-4 min-h-[86px] min-w-0 overflow-hidden shadow-soft transition-all duration-200',
+        'group relative flex flex-col justify-between rounded-[16px] border p-3 sm:p-4 min-h-[84px] min-w-0 overflow-hidden shadow-soft transition-all duration-200',
         isHero
           ? 'bg-brand-gradient border-transparent text-white'
           : isKeyNumber
@@ -165,11 +165,11 @@ export const StatCard: React.FC<StatCardProps> = ({
         className
       )}
     >
-      {/* Top row: 12px muted label + 32px icon chip */}
-      <div className="relative z-10 flex items-start justify-between gap-2 min-w-0">
+      {/* Top row: compact muted label + icon chip */}
+      <div className="relative z-10 flex items-start justify-between gap-1.5 sm:gap-2 min-w-0">
         <span
           className={cn(
-            'text-[12px] font-medium leading-snug break-words pt-0.5',
+            'min-w-0 flex-1 text-[11px] sm:text-[12px] font-medium leading-snug break-words pt-0.5',
             isHero ? 'text-white/85' : 'text-[var(--text-muted)]'
           )}
           title={label}
@@ -180,27 +180,27 @@ export const StatCard: React.FC<StatCardProps> = ({
         <span
           aria-hidden="true"
           className={cn(
-            'h-8 w-8 rounded-[10px] inline-flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105',
+            'h-7 w-7 sm:h-8 sm:w-8 rounded-[9px] sm:rounded-[10px] inline-flex items-center justify-center shrink-0 transition-transform duration-200 group-hover:scale-105',
             isHero
               ? 'bg-white/16 text-white'
               : 'bg-[var(--brand-soft)] text-[var(--brand)]'
           )}
         >
-          <IconComp className="h-4 w-4 stroke-[2]" />
+          <IconComp className="h-3.5 w-3.5 sm:h-4 sm:w-4 stroke-[2]" />
         </span>
       </div>
 
       {/* Bottom section: full-width Sora value + optional change chip + optional sparkline */}
-      <div className="relative z-10 mt-1.5 flex flex-col gap-1.5 min-w-0">
+      <div className="relative z-10 mt-2 flex flex-col gap-1.5 min-w-0">
         <div className="min-w-0 w-full">
           <div
             className={cn(
               'font-heading font-semibold tabular-nums tracking-tight leading-tight break-words',
               displayStr.length > 13
-                ? 'text-[15px] sm:text-base lg:text-[17px]'
+                ? 'text-[14px] min-[400px]:text-[15px] sm:text-base lg:text-[17px]'
                 : displayStr.length > 10
-                  ? 'text-base sm:text-[17px] lg:text-[19px]'
-                  : 'text-[17px] sm:text-[19px] lg:text-[21px]',
+                  ? 'text-[15px] min-[400px]:text-base sm:text-[17px] lg:text-[19px]'
+                  : 'text-base min-[400px]:text-[17px] sm:text-[19px] lg:text-[21px]',
               isHero
                 ? 'text-white'
                 : isKeyNumber
@@ -213,10 +213,10 @@ export const StatCard: React.FC<StatCardProps> = ({
           </div>
 
           {changeLabel && (
-            <div className="mt-1 inline-flex items-center gap-0.5 max-w-full">
+            <div className="mt-1.5 flex items-center max-w-full min-w-0">
               <span
                 className={cn(
-                  'inline-flex items-center gap-0.5 rounded-[10px] px-1.5 py-0.5 text-[10px] font-semibold tabular-nums leading-none break-words',
+                  'inline-flex items-center gap-1 rounded-[8px] px-1.5 py-0.5 text-[10px] font-semibold tabular-nums leading-snug break-words max-w-full',
                   isHero
                     ? 'bg-white/18 text-white'
                     : changeTone === 'positive'
@@ -228,7 +228,7 @@ export const StatCard: React.FC<StatCardProps> = ({
               >
                 {changeTone === 'positive' && <ArrowUpRight className="h-2.5 w-2.5 shrink-0" />}
                 {changeTone === 'negative' && <ArrowDownRight className="h-2.5 w-2.5 shrink-0" />}
-                <span>{changeLabel}</span>
+                <span className="truncate">{changeLabel}</span>
               </span>
             </div>
           )}
@@ -236,7 +236,7 @@ export const StatCard: React.FC<StatCardProps> = ({
 
         {/* Optional sparkline spans below the number so it never steals horizontal space from the figure */}
         {sparkPaths && (
-          <div className="h-[26px] w-full pointer-events-none">
+          <div className="h-[24px] sm:h-[26px] w-full pointer-events-none">
             <svg
               viewBox="0 0 88 40"
               preserveAspectRatio="none"
@@ -277,7 +277,8 @@ export const StatCard: React.FC<StatCardProps> = ({
 
 /**
  * D4 StatCardGrid:
- * 2 across on mobile (360px), repeat(auto-fit, minmax(200px, 1fr)) on tablet/desktop (4 across on desktop).
+ * 1 across on ultra-narrow (<360px), 2 across on standard mobile (>=360px),
+ * repeat(auto-fit, minmax(200px, 1fr)) on tablet/desktop.
  */
 export const StatCardGrid: React.FC<{ children: React.ReactNode; className?: string }> = ({
   children,
@@ -290,7 +291,7 @@ export const StatCardGrid: React.FC<{ children: React.ReactNode; className?: str
     <div
       ref={gridRef}
       className={cn(
-        'grid grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3 sm:gap-3.5 items-stretch min-w-0',
+        'grid grid-cols-1 min-[360px]:grid-cols-2 sm:grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-2.5 sm:gap-3.5 items-stretch min-w-0',
         className
       )}
     >

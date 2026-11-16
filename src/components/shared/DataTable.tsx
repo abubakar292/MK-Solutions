@@ -485,14 +485,14 @@ export function DataTable<T>({
               data-table-row
               onClick={onRowClick ? () => onRowClick(row) : undefined}
               className={cn(
-                'rounded-[16px] border border-[var(--border)] p-4 space-y-2.5 transition-colors duration-200 min-w-0 shadow-soft',
+                'rounded-[16px] border border-[var(--border)] p-3.5 space-y-2.5 transition-colors duration-200 min-w-0 overflow-hidden shadow-soft',
                 isHighlighted ? 'bg-[var(--brand-soft)]' : 'bg-[var(--bg)]',
                 onRowClick && 'cursor-pointer active:bg-[var(--surface-subtle)]'
               )}
             >
               {(mobileCardTitle || mobileCardRight) && (
                 <div className="flex items-start justify-between gap-2 pb-2 border-b border-[var(--border)]/60 min-w-0">
-                  <div className="font-heading font-semibold text-sm text-[var(--text)] truncate">
+                  <div className="font-heading font-semibold text-sm text-[var(--text)] min-w-0 flex-1 break-words">
                     {mobileCardTitle ? mobileCardTitle(row) : null}
                   </div>
                   {mobileCardRight && (
@@ -503,16 +503,16 @@ export function DataTable<T>({
                 </div>
               )}
 
-              <div className="space-y-1.5">
+              <div className="space-y-2">
                 {visibleColumns
                   .filter((col) => !col.hideOnMobileCard && col.key !== 'actions')
                   .map((col) => (
                     <div
                       key={col.key}
-                      className="flex items-center justify-between gap-3 text-xs min-w-0"
+                      className="flex items-start justify-between gap-3 text-xs min-w-0"
                     >
-                      <span className="text-[var(--text-muted)] shrink-0">{col.header}</span>
-                      <span className="text-[var(--text)] font-medium truncate text-right tabular-nums">
+                      <span className="text-[var(--text-muted)] shrink-0 pt-0.5">{col.header}</span>
+                      <span className="text-[var(--text)] font-medium min-w-0 flex-1 break-words text-right tabular-nums">
                         {col.render(row)}
                       </span>
                     </div>
@@ -521,7 +521,7 @@ export function DataTable<T>({
 
               {renderExpanded && isExpanded && (
                 <div
-                  className="-mx-4 pt-2"
+                  className="-mx-3.5 pt-2"
                   onClick={(e) => e.stopPropagation()}
                 >
                   <AnimatedExpandedContent>{renderExpanded(row)}</AnimatedExpandedContent>
@@ -530,14 +530,14 @@ export function DataTable<T>({
 
               {(mobileCardActions || renderExpanded) && (
                 <div
-                  className="pt-2 border-t border-[var(--border)]/60 flex items-center justify-between gap-2"
+                  className="pt-2 border-t border-[var(--border)]/60 flex flex-wrap items-center justify-between gap-2"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {renderExpanded ? (
                     <button
                       type="button"
                       onClick={() => toggleExpandRow(rowId)}
-                      className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brand)] cursor-pointer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-[var(--brand)] cursor-pointer min-h-[36px]"
                     >
                       <ChevronRight
                         className={cn(
@@ -550,7 +550,7 @@ export function DataTable<T>({
                   ) : (
                     <span />
                   )}
-                  <div className="flex items-center justify-end gap-1.5">
+                  <div className="flex flex-wrap items-center justify-end gap-1.5 ml-auto">
                     {mobileCardActions && mobileCardActions(row)}
                   </div>
                 </div>

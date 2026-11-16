@@ -2829,11 +2829,11 @@ export const ReportsPage: React.FC = () => {
       />
 
       {/* 4.1 Top: Period selector (This month, Last month, Custom range) + FilterBar where relevant */}
-      <div className="rounded-[14px] border border-[var(--border)] bg-[var(--bg)] p-3.5 sm:p-4 space-y-3 shadow-soft">
-        <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="rounded-[14px] border border-[var(--border)] bg-[var(--bg)] p-3 sm:p-4 space-y-3 shadow-soft min-w-0">
+        <div className="flex flex-col sm:flex-row sm:flex-wrap sm:items-center justify-between gap-2.5 sm:gap-3 min-w-0">
           {/* Period Selector Pills */}
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1 rounded-[10px] border border-[var(--border)] bg-[var(--surface-subtle)] p-1">
+          <div className="flex flex-col sm:flex-row sm:flex-wrap items-stretch sm:items-center gap-2 min-w-0">
+            <div className="grid grid-cols-3 sm:flex items-center gap-1 rounded-[10px] border border-[var(--border)] bg-[var(--surface-subtle)] p-1 min-w-0">
               {(
                 [
                   { id: 'this_month', label: 'This month' },
@@ -2845,7 +2845,7 @@ export const ReportsPage: React.FC = () => {
                   key={p.id}
                   type="button"
                   onClick={() => handleSelectPeriodMode(p.id)}
-                  className={`min-h-[34px] rounded-[7px] px-3 text-xs font-medium transition-colors cursor-pointer ${
+                  className={`min-h-[36px] sm:min-h-[34px] rounded-[7px] px-2 sm:px-3 text-xs font-medium transition-colors cursor-pointer truncate ${
                     periodMode === p.id
                       ? 'bg-[var(--brand)] text-[var(--bg)] font-semibold'
                       : 'text-[var(--text-muted)] hover:text-[var(--text)]'
@@ -2866,12 +2866,14 @@ export const ReportsPage: React.FC = () => {
                 onChangeFrom={setFromDate}
                 onChangeTo={setToDate}
                 allowAllDates={false}
+                className="w-full sm:w-auto"
               />
             ) : (
               <FilterMonthPill
                 value={selectedMonth}
                 onChange={(m) => applyMonthSelection(m)}
                 ariaLabel="Select report month"
+                className="w-full sm:w-auto justify-between sm:justify-start"
               />
             )}
           </div>
